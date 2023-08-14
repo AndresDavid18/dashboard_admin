@@ -54,7 +54,7 @@ $resultset = mysqli_query($conexion, $sql);
             <table class="table" id='qwert'>
                 <thead>
                     <tr>
-                        <th scope="col">Numero</th>
+                        <th scope="col">Nuero</th>
                         <th scope="col">correo</th>
                         <th scope="col">fecha</th>
                         
