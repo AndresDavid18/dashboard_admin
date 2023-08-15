@@ -54,7 +54,7 @@ $resultset = mysqli_query($conexion, $sql);
             <table class="table" id='qwert'>
                 <thead>
                     <tr>
-                        <th scope="col">Nuero</th>
+                        <th scope="col">Numero</th>
                         <th scope="col">correo</th>
                         <th scope="col">fecha</th>
                         
@@ -86,7 +86,7 @@ $resultset = mysqli_query($conexion, $sql);
                     ?>
                 </tbody>
             </table>
-            <a href="tabla.php" class="btn btn-warning">Volver</a>
+            <a href="http://localhost/dashboard_admin/vistas/"  class="btn btn-warning">Volver</a>
         </div>
     </div>
 </div>

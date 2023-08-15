@@ -1,8 +1,3 @@
-<?php
-
-session_start();
-require 'dbcon.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +12,15 @@ require 'dbcon.php';
 	<title>AdminHub</title>
 </head>
 <body>
+<?php
+
+session_start();
+$activo=$_SESSION['activo']??'';
+if($activo==''){
+	header("Location: http://localhost/dashboard_admin/delivery/loginad.php");
+}
+require 'dbcon.php';
+?>
 
 
 	<!-- SIDEBAR -->

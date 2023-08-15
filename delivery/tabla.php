@@ -112,8 +112,8 @@
                         ?>
                     </tbody>
                 </table>
-                <a href="tabla logins.php" class="btn btn-warning">Ver detalles</a>
-                <a href="http://localhost/dashboard_admin/vistas/" class="btn btn-primary">Volver</a>
+                <a href="tabla logins.php" class="btn btn-primary">Ver detalles</a>
+                <a href="http://localhost/dashboard_admin/vistas/" class="btn btn-warning">Volver</a>
             </div>
         </div>
     </div>
