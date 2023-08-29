@@ -86,7 +86,7 @@ $resultset = mysqli_query($conexion, $sql);
                     ?>
                 </tbody>
             </table>
-            <a href="http://localhost/dashboard_admin/vistas/"  class="btn btn-warning">Volver</a>
+           
         </div>
     </div>
 </div>

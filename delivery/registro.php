@@ -90,7 +90,7 @@
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
           <form action="" method="post" onsubmit="return validateForm();">
             <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-              <h1 class="display-12 fw-bolder text-dark mb-2">Registrate ahora</h3>
+              <h1 class="display-12 fw-bolder text-dark mb-2">2</h3>
             </div><div class="container">
     <div class="row">
       <div class="col-12 " >
@@ -108,7 +108,16 @@
                     $cel = isset($_POST['cel']) ? $_POST['cel'] : '';
                     $email = isset($_POST['email']) ? $_POST['email'] : '';
                     $password = isset($_POST['password']) ? $_POST['password'] : '';
-                
+                    
+                    $email = mysqli_real_escape_string($conexion, $email); // Escapar el correo electrónico
+                    $consulta_correo = "SELECT COUNT(*) AS total FROM cliente WHERE Correo = '$email'";
+                    $resultado_correo = mysqli_query($conexion, $consulta_correo);
+                    $fila_correo = mysqli_fetch_assoc($resultado_correo);
+                    if ($fila_correo['total'] > 0) {
+                        echo '<div class="alert alert-danger" role="alert">El correo electrónico ya está registrado.</div>';
+                        mysqli_close($conexion);
+                        exit;
+                    }
                     if (empty($nombre) || empty($apellido) || empty($cel) || empty($email) || empty($password)) {
                         echo 'Por favor, completa todos los campos.';
                         exit; // Detener la ejecución del script si hay campos vacíos
@@ -120,7 +129,7 @@
                         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                             echo '<div class="alert alert-danger" role="alert">Dirección de correo no válida, ingrese una dirección válida.</div>';
                         } else {
-                          // Escapar los valores para evitar inyección de SQL
+                          // Escapar los valores para evitar in74ye74cción de SQL
                           $nombre = mysqli_real_escape_string($conexion, $nombre);
                           $apellido = mysqli_real_escape_string($conexion, $apellido);
                           $cel = mysqli_real_escape_string($conexion, $cel);
@@ -150,7 +159,7 @@
             <div class="form-outline mb-4">
               <input type="text" id="nombre" name='nombre' class="form-control form-control-lg"
                 placeholder="Ingresa tu nombre completo" value="<?php echo isset($nombre) ? $nombre : ''; ?>"required/>
-              <label class="form-label fw-bold" for="nombre">Nombre</label>
+              <label class="form-label fw-bold" for="nombre">Nomb45re744654</label>
             </div>
 
             <!-- Apellido input -->
@@ -171,7 +180,7 @@
             <div class="form-outline mb-4">
               <input type="email" id="email" name='email' class="form-control form-control-lg"
                 placeholder="Ingresa un correo electrónico válido" value="<?php echo isset($email) ? $email : ''; ?>"required/>
-              <label class="form-label fw-bold" for="email">Correo Electrónico</label>
+              <label class="form-label fw-bold" for="email">Correo Elnico</label>
             </div>
 
             <!-- Confirmar Email input -->

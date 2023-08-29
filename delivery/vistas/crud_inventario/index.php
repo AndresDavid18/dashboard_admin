@@ -103,18 +103,8 @@ session_start();
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Inventario</h1>
-				</div>
-				<a href="#" class="btn-download">
-					<i class='bx bxs-cloud-download' ></i>
-					<span class="text">Descargar Analisis</span>
-				</a>
-			</div>
-
-			<div class="container mt-4">
+	
+	
 
 <?php include('message.php'); ?>
 
