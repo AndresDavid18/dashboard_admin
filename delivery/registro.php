@@ -94,63 +94,56 @@
             </div><div class="container">
     <div class="row">
       <div class="col-12 " >
-        <?php
-               
-                if (isset($_POST['enviar'])) {
-                    include_once 'conexion.php';
-                    $conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_database);
-                    if (!$conexion) {
-                        die('Error de conexión' . mysqli_connect_error());
-                    }
-                
-                    $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : '';
-                    $apellido = isset($_POST['apellido']) ? $_POST['apellido'] : '';
-                    $cel = isset($_POST['cel']) ? $_POST['cel'] : '';
-                    $email = isset($_POST['email']) ? $_POST['email'] : '';
-                    $password = isset($_POST['password']) ? $_POST['password'] : '';
-                    
-                    $email = mysqli_real_escape_string($conexion, $email); // Escapar el correo electrónico
-                    $consulta_correo = "SELECT COUNT(*) AS total FROM cliente WHERE Correo = '$email'";
-                    $resultado_correo = mysqli_query($conexion, $consulta_correo);
-                    $fila_correo = mysqli_fetch_assoc($resultado_correo);
-                    if ($fila_correo['total'] > 0) {
-                        echo '<div class="alert alert-danger" role="alert">El correo electrónico ya está registrado.</div>';
-                        mysqli_close($conexion);
-                        exit;
-                    }
-                    if (empty($nombre) || empty($apellido) || empty($cel) || empty($email) || empty($password)) {
-                        echo 'Por favor, completa todos los campos.';
-                        exit; // Detener la ejecución del script si hay campos vacíos
-                    } else {
-                        if (strlen($password) < 8) {
-                            echo '<div class="alert alert-danger" role="alert">La contraseña debe tener al menos 8 caracteres.</div>';
-                        } else if (!preg_match('/^\d{6,}$/', $cel)) {
-                            echo '<div class="alert alert-danger" role="alert">Debe poner un número de teléfono o celular válido.</div>';
-                        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                            echo '<div class="alert alert-danger" role="alert">Dirección de correo no válida, ingrese una dirección válida.</div>';
-                        } else {
-                          // Escapar los valores para evitar in74ye74cción de SQL
-                          $nombre = mysqli_real_escape_string($conexion, $nombre);
-                          $apellido = mysqli_real_escape_string($conexion, $apellido);
-                          $cel = mysqli_real_escape_string($conexion, $cel);
-                          $email = mysqli_real_escape_string($conexion, $email);
-                          $password = mysqli_real_escape_string($conexion, $password);
-                          // Crear la consulta SQL para insertar los datos en la tabla "cliente"
-                          $sql = "INSERT INTO cliente (Nombres, Apellidos, telefono, Correo, Contraseña) VALUES ('$nombre', '$apellido', '$cel', '$email', '$password')";
-                          // Ejecutar la consulta
-                          if (mysqli_query($conexion, $sql)) {
-        
-                             $mess = 'Los datos se guardaron correctamente, ya puede iniciar sesión';
-                              echo "<script>alert('$mess');window.location.href='login.php';</script>";
-        
-                          } else {
-                              echo 'Error al guardar los datos: ' . mysqli_error($conexion);
-                          }
-                      }
-                  }
-                  mysqli_close($conexion);
-                }
-                ?>
+      <?php
+if (isset($_POST['enviar'])) {
+    include_once 'conexion.php';
+    $conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_database);
+    if (!$conexion) {
+        die('Error de conexión' . mysqli_connect_error());
+    }
+
+    $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : '';
+    $apellido = isset($_POST['apellido']) ? $_POST['apellido'] : '';
+    $cel = isset($_POST['cel']) ? $_POST['cel'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+
+    if (empty($nombre) || empty($apellido) || empty($cel) || empty($email) || empty($password)) {
+        echo 'Por favor, completa todos los campos.';
+    } else if (strlen($password) < 8) {
+        echo '<div class="alert alert-danger" role="alert">La contraseña debe tener al menos 8 caracteres.</div>';
+    } else if (!preg_match('/^\d{6,}$/', $cel)) {
+        echo '<div class="alert alert-danger" role="alert">Debe poner un número de teléfono o celular válido.</div>';
+    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo '<div class="alert alert-danger" role="alert">Dirección de correo no válida, ingrese una dirección válida.</div>';
+    } else {
+        $email = mysqli_real_escape_string($conexion, $email);
+        $consulta_correo = "SELECT COUNT(*) AS total FROM cliente WHERE Correo = '$email'";
+        $resultado_correo = mysqli_query($conexion, $consulta_correo);
+        $fila_correo = mysqli_fetch_assoc($resultado_correo);
+        if ($fila_correo['total'] > 0) {
+            echo '<div class="alert alert-danger" role="alert">El correo electrónico ya está registrado.</div>';
+        } else if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d).{8,}$/', $password)) {
+            echo '<div class="alert alert-danger" role="alert">La contraseña debe contener letras y números.</div>';
+        } else {
+            $nombre = mysqli_real_escape_string($conexion, $nombre);
+            $apellido = mysqli_real_escape_string($conexion, $apellido);
+            $cel = mysqli_real_escape_string($conexion, $cel);
+            $password = mysqli_real_escape_string($conexion, $password);
+            
+            $sql = "INSERT INTO cliente (Nombres, Apellidos, telefono, Correo, Contraseña) VALUES ('$nombre', '$apellido', '$cel', '$email', '$password')";
+            
+            if (mysqli_query($conexion, $sql)) {
+                $mess = 'Los datos se guardaron correctamente, ya puede iniciar sesión';
+                echo "<script>alert('$mess');window.location.href='login.php';</script>";
+            } else {
+                echo 'Error al guardar los datos: ' . mysqli_error($conexion);
+            }
+        }
+    }
+    mysqli_close($conexion);
+}
+?>
       </div>
     </div>
   </div>
