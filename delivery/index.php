@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<?php
+session_start(); // Iniciar la sesión
+
+// Verificar si el usuario está autenticado y tiene un nombre en la sesión
+if (isset($_SESSION['usuario'])) {
+    $nombreUsuario = $_SESSION['usuario'];
+} else {
+    $nombreUsuario = "Iniciar Sesión"; // Mostrar "Iniciar Sesión" por defecto si no hay usuario en la sesión
+}
+?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -82,6 +91,24 @@
                                 <li class="nav-item"><a href="login.php">Usuario</a></li>
                             </div>
                         </div>
+                        <div class="dropdown">
+        <button class="bi feature bg-dark bg-gradient text-white rounded-1 mb-1 bi-person"></button>
+        <div class="dropdown-content">
+            <?php
+            if ($nombreUsuario === "Iniciar Sesión") {
+                // Si el usuario no está autenticado, muestra los enlaces de inicio de sesión
+                ?>
+                <li class="nav-item"><a href="loginad.php">Administrador</a></li>
+                <li class="nav-item"><a href="login.php">Usuario</a></li>
+                <?php
+            } else {
+                // Si el usuario está autenticado, muestra su nombre y un enlace de cierre de sesión
+                echo '<p class="text-white">Bienvenido, ' . $nombreUsuario . '!</p>';
+                echo '<li class="nav-item"><a href="cerrar_sesion.php">Cerrar Sesión</a></li>';
+            }
+            ?>
+        </div>
+    </div>
                     </ul>
                     </li>
                     </ul>

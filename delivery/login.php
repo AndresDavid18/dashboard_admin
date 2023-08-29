@@ -92,49 +92,55 @@
               <input type="password" id="password" name='password' class="form-control form-control-lg" placeholder="Ingresa tu contraseña" value="<?php echo isset($password) ? $password : ''; ?>" required />
               <label class="form-label fw-bold" for="password">Contraseña</label>
             </div><?php
-                  if (isset($_POST['ingresar'])) {
-                    include('conexion.php');
-                    $conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_database);
-                    if (!$conexion) {
-                      die("Error al conectar a la base de datos: " . mysqli_connect_error());
-                    }
+if (isset($_POST['ingresar'])) {
+    include('conexion.php');
+    $conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_database);
+    
+    if (!$conexion) {
+        die("Error al conectar a la base de datos: " . mysqli_connect_error());
+    }
 
-                    $email = isset($_POST['email']) ? $_POST['email'] : '';
-                    $password = isset($_POST['password']) ? $_POST['password'] : '';
-                  
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-                    $query = "SELECT id_Cliente, correo, contraseña FROM cliente WHERE correo = '$email' AND contraseña = '$password'";
-                    $resultado = mysqli_query($conexion, $query);
+    $query = "SELECT id_Cliente, correo, contraseña, nombre FROM cliente WHERE correo = '$email'";
+    $resultado = mysqli_query($conexion, $query);
 
-                    if (strpos($email, '@') !== false && mysqli_num_rows($resultado) == 1) {
-                      $row = mysqli_fetch_assoc($resultado);
-                      $idCliente = $row['id_Cliente'];
-                      // Correo válido y contraseña válida
-                      if (strlen($password) >= 8) {
-                        // Insertar registro de inicio de sesión en la tabla "inicio"
-                        $insertQuery = "INSERT INTO login (id_cliente, fecha) VALUES ('$idCliente', NOW())";
-                        mysqli_query($conexion, $insertQuery);
+    if (mysqli_num_rows($resultado) == 1) {
+        $row = mysqli_fetch_assoc($resultado);
+        $idCliente = $row['id_Cliente'];
+        $hashedPassword = $row['contraseña'];
 
-                        // Redirigir al usuario a index.php
-                        echo "<script>window.location.href='index.php';</script>";
-                        exit;
-                      } else {
-                        // Contraseña inválida
-                  ?>
-                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Contraseña incorrecta.</strong> Verifica los campos ingresados.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                <?php
-                      }
-                    } else {
-                      // Correo inválido o contraseña incorrecta
-                ?>
-                <div class="alert alert-danger" role="alert">Correo o contraseña incorrecta.</div>
-            <?php
-                    }
-                  }
+        if (password_verify($password, $hashedPassword)) {
+            // Contraseña válida
+            session_start();
+            $_SESSION['usuario'] = $row['nombre'];
+
+            // Insertar registro de inicio de sesión en la tabla "inicio"
+            $insertQuery = "INSERT INTO login (id_cliente, fecha) VALUES ('$idCliente', NOW())";
+            mysqli_query($conexion, $insertQuery);
+
+            // Redirigir al usuario a index.php
+            echo "<script>window.location.href='index.php';</script>";
+            exit;
+        } else {
+            // Contraseña inválida
             ?>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Contraseña incorrecta.</strong> Verifica los campos ingresados.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php
+        }
+    } else {
+        // Correo inválido o no existe
+        ?>
+        <div class="alert alert-danger" role="alert">Correo o contraseña incorrecta.</div>
+        <?php
+    }
+}
+?>
+
 
 
             <div class="d-flex justify-content-between align-items-center">
